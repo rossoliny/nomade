@@ -1,0 +1,28 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "4.24",
+	"Category": "Samples",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "StrategyGame",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
+		},
+		{
+			"Name": "StrategyGameLoadingScreen",
+			"Type": "Runtime",
+			"LoadingPhase": "PreLoadingScreen"
+		}
+	],
+	"TargetPlatforms": [
+		"Android",
+		"IOS",
+		"MacNoEditor",
+		"WindowsNoEditor"
+	],
+	"EpicSampleNameHash": "2647008642"
+}

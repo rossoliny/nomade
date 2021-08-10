@@ -7,6 +7,8 @@
 #include "StrategyBuilding_Brewery.h"
 #include "StrategyGameBlueprintLibrary.h"
 #include "StrategyAttachment.h"
+#include "LycanthropeCharacter.h"
+#include "GhoulCharacter.h"
 #include "ZombieCharacter.h"
 
 UStrategyAIDirector::UStrategyAIDirector(const FObjectInitializer& ObjectInitializer)
@@ -282,6 +284,94 @@ void UStrategyAIDirector::SpawnZombies()
 		
 	}
 }
+
+
+
+void UStrategyAIDirector::SpawnGhouls()
+{
+	static OffsetsGeneratorHelper OffsetsGenerator;
+
+	const bool bShoudSpawnNewUnits = GetWorld()->GetTimeSeconds() > NextGhoulSpawnTime && MyTeamNum == EStrategyTeam::Enemy;
+	if (!bShoudSpawnNewUnits)
+	{
+		return;
+	}
+	const AStrategyBuilding_Brewery* const Owner = Cast<AStrategyBuilding_Brewery>(GetOwner());
+
+	FVector Loc = Owner->GetActorLocation();
+	const FVector X = Owner->GetTransform().GetScaledAxis(EAxis::X);
+	const FVector Y = Owner->GetTransform().GetScaledAxis(EAxis::Y);
+	Loc += X * RadiusToSpawnOn + Y * OffsetsGenerator.GetOffset();
+
+	FActorSpawnParameters SpawnInfo;
+	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	auto rot = Owner->GetActorRotation();
+	doNotOptimizeAway(rot);
+
+	AGhoulCharacter* const  GhoulChar = GetWorld()->SpawnActor<AGhoulCharacter>(Owner->GhoulCharClass, Loc, rot, SpawnInfo);
+
+	if ((GhoulChar != nullptr))
+	{
+		
+		GhoulChar->SetTeamNum(GetTeamNum());
+
+		GhoulChar->SpawnDefaultController();
+		AStrategyGameState* const GameState = GetWorld()->GetGameState<AStrategyGameState>();
+		if (GameState != nullptr)
+		{
+			GameState->OnCharSpawned(GhoulChar);
+		}
+
+		NextGhoulSpawnTime = GetWorld()->GetTimeSeconds() + FMath::FRandRange(6.0f, 7.0f);
+
+	}
+}
+
+
+
+
+void UStrategyAIDirector::SpawnLycanthrope()
+{
+	static OffsetsGeneratorHelper OffsetsGenerator;
+
+	const bool bShoudSpawnNewUnits = GetWorld()->GetTimeSeconds() > NextLycanthropeSpawnTime && MyTeamNum == EStrategyTeam::Enemy;
+	if (!bShoudSpawnNewUnits)
+	{
+		return;
+	}
+	const AStrategyBuilding_Brewery* const Owner = Cast<AStrategyBuilding_Brewery>(GetOwner());
+
+	FVector Loc = Owner->GetActorLocation();
+	const FVector X = Owner->GetTransform().GetScaledAxis(EAxis::X);
+	const FVector Y = Owner->GetTransform().GetScaledAxis(EAxis::Y);
+	Loc += X * RadiusToSpawnOn + Y * OffsetsGenerator.GetOffset();
+
+	FActorSpawnParameters SpawnInfo;
+	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	auto rot = Owner->GetActorRotation();
+	doNotOptimizeAway(rot);
+
+	ALycanthropeCharacter* const  LycanthropelChar = GetWorld()->SpawnActor<ALycanthropeCharacter>(Owner->LycanthropeClass, Loc, rot, SpawnInfo);
+
+	if ((LycanthropelChar != nullptr))
+	{
+		LycanthropelChar->SetTeamNum(GetTeamNum());
+
+		LycanthropelChar->SpawnDefaultController();
+		AStrategyGameState* const GameState = GetWorld()->GetGameState<AStrategyGameState>();
+		if (GameState != nullptr)
+		{
+			GameState->OnCharSpawned(LycanthropelChar);
+		}
+
+		NextLycanthropeSpawnTime = GetWorld()->GetTimeSeconds() + FMath::FRandRange(6.0f, 7.0f);
+
+	}
+}
+
+
+
+
 #pragma optimize("", on)
 
 void UStrategyAIDirector::RequestSpawn()
@@ -294,4 +384,6 @@ void UStrategyAIDirector::TickComponent(float DeltaTime, enum ELevelTick TickTyp
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	SpawnDwarfs();
 	SpawnZombies();
+	SpawnGhouls();
+	SpawnLycanthrope();
 }

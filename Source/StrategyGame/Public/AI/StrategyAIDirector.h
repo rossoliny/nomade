@@ -38,6 +38,9 @@ class UStrategyAIDirector : public UActorComponent
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Minions)
 	int32 ZombieWaveSize;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Minions)
+	int32 GhoulWaveSize;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Minions)
 	float RadiusToSpawnOn;
@@ -80,6 +83,7 @@ protected:
 	/** check conditions and spawn minions if possible */
 	void SpawnDwarfs();
 
+	void SpawnGhouls();
 	/** Custom scale for spawns */
 	float CustomScale;
 
@@ -90,6 +94,8 @@ protected:
 	float NextDwarfSpawnTime;
 
 	float NextZombieSpawnTime;
+
+	float NextGhoulSpawnTime;
 
 	/** team number */
 	uint8 MyTeamNum;

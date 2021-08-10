@@ -5,6 +5,7 @@
 #include "StrategyBuilding.h"
 #include "ZombieCharacter.h"
 #include "GhoulCharacter.h"
+#include "LycanthropeCharacter.h"
 #include "StrategyBuilding_Brewery.generated.h"
 
 class AStrategyChar;
@@ -34,6 +35,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = Brewery)
 	TSubclassOf<AZombieCharacter> ZombieCharClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = Brewery)
+	TSubclassOf<ALycanthropeCharacter> LycanthropeClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = Brewery)
 	TSubclassOf<AGhoulCharacter> GhoulCharClass;

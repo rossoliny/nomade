@@ -12,6 +12,7 @@
 UStrategyAIDirector::UStrategyAIDirector(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 	, WaveSize(3)
+	, AllySize(0)
 	, RadiusToSpawnOn(200)
 	, CustomScale(1.0)
 	, AnimationRate(1)
@@ -141,7 +142,7 @@ void UStrategyAIDirector::SpawnDwarfs()
 		}
 	}
 
-	if(WaveSize > 0)
+	if(WaveSize > 0 && AllySize >0)
 	{
 		// find best place on ground to spawn at
 		const AStrategyBuilding_Brewery* const Owner = Cast<AStrategyBuilding_Brewery>(GetOwner());
@@ -287,6 +288,11 @@ void UStrategyAIDirector::SpawnZombies()
 void UStrategyAIDirector::RequestSpawn()
 {
 	WaveSize += 1;
+}
+
+void UStrategyAIDirector::RequestSpawnAlly()
+{
+	AllySize += 1;
 }
 
 void UStrategyAIDirector::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)

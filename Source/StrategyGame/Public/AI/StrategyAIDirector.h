@@ -37,6 +37,9 @@ class UStrategyAIDirector : public UActorComponent
 	int32 WaveSize;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Minions)
+	int32 AllySize;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Minions)
 	int32 ZombieWaveSize;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=Minions)
@@ -76,6 +79,8 @@ public:
 
 	/** request spawn from AI Director */
 	void RequestSpawn();
+
+	void RequestSpawnAlly(); 
 protected:
 	/** check conditions and spawn minions if possible */
 	void SpawnDwarfs();

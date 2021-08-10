@@ -157,7 +157,9 @@ bool AStrategyBuilding_Brewery::SpawnDwarf()
 	FPlayerData* const MyData = GetTeamData();
 	if (MyData && int32(MyData->ResourcesAvailable) >= SpawnCost && AIDirector != nullptr)
 	{
+		
 		AIDirector->RequestSpawn();
+		AIDirector->RequestSpawnAlly();
 		MyData->ResourcesAvailable -= SpawnCost;
 	}
 
